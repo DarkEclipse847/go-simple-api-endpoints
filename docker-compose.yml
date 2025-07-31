@@ -1,0 +1,25 @@
+services:
+  test_task:
+    container_name: test_task
+    build: .
+    env_file:
+      - ./config.env
+    ports:
+      - 8000:8000
+    depends_on:
+      - go_db
+  go_db:
+    container_name: go_db
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "1337:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
