@@ -49,7 +49,7 @@ func main() {
 
 	mainRouter := router.Methods(http.MethodPost, http.MethodGet).Subrouter()
 
-	mainRouter.HandleFunc("/api/v1/wallet", handlers.WalletOperationHandler(db)).Methods("POST")
+	mainRouter.HandleFunc("/api/v1/wallet/", handlers.WalletOperationHandler(db)).Methods("POST")
 	mainRouter.HandleFunc("/api/v1/wallets/{uuid}", handlers.GetBalanceHandler(db)).Methods("GET")
 
 	probesRouter := router.Methods(http.MethodGet).Subrouter()

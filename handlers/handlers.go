@@ -15,7 +15,6 @@ import (
 
 func WalletOperationHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		w.Header().Set("Content-Type", "application/json")
 		log.Debug().Msgf("Request body: %v\n", r.Body)
 

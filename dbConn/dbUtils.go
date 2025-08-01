@@ -26,11 +26,11 @@ func InsertTestUser(db *sql.DB, uuid string, amount float32) error {
 	// Ограничиваем запрос (LIMIT 1) чтобы поиск выполнялся быстрее
 	err := db.QueryRow("SELECT exists(SELECT 1 FROM wallets WHERE uuid = $1 LIMIT 1)", uuid).Scan(&exists)
 	if err != nil {
-		log.Error().Msgf("Error occured while check uuid existence %v", err)
+		log.Error().Msgf("Error occured while checking uuid existence %v", err)
 		return err
 	}
 	// UUIDs generated randomly using [this](https://www.uuidgenerator.net/) cause there is no api endpoint to generate it(login/auth etc.)
-	if exists == false {
+	if !exists {
 		_, err = db.Exec("INSERT INTO wallets (uuid, amount) VALUES($1, $2)", uuid, amount)
 		if err != nil {
 			log.Info().Msgf("Error occured while inserting test value %v", err)
@@ -42,6 +42,7 @@ func InsertTestUser(db *sql.DB, uuid string, amount float32) error {
 }
 
 func UpdateWalletBalance(db *sql.DB, uuid string, operation string, amount float64, w http.ResponseWriter, r http.Request) error {
+	// Using trasactionsan isolation level to fullfil ACID principles
 	tx, err := db.BeginTx(r.Context(), &sql.TxOptions{Isolation: sql.LevelRepeatableRead})
 	if err != nil {
 		log.Error().Msgf("Transaction crashed at start: %v", err)
