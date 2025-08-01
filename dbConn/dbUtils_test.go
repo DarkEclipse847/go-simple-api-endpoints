@@ -11,13 +11,12 @@ import (
 )
 
 func TestInsertTestUser(t *testing.T) {
-	var test string
-	db, err := sql.Open("postgres", "user=postgres password=postgres dbname=postgres sslmode=disable")
+	var test bool
+	db, err := sql.Open("postgres", "user=postgres port=1337 password=postgres dbname=postgres sslmode=disable")
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
 	defer db.Close()
-
 	err = dbconn.InsertTestUser(db, "9ca97cac-51ef-4107-b5ec-89ff2b571712", 1000.00)
 	if err != nil {
 		log.Fatal().Msg(err.Error())
